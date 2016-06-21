@@ -1,0 +1,15 @@
+{
+  "name": "changeme",
+  "version": "1.0.0",
+  "description": "changeme",
+  "main": "app.js",
+  "dependencies": {
+    "express": "^4.14.0",
+    "jade": "^1.11.0"
+  },
+  "scripts": {
+    "start": "node app.js"
+  },
+  "author": "Richard C Felix",
+  "license": "ISC"
+}
