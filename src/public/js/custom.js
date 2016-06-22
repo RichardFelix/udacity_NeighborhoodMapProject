@@ -56,16 +56,15 @@ var ViewModel = function ViewModel() {
 
   // filter visible list items
   self.filter = function() {
-    //console.log(self.input());
-    var inputLength = self.input().length;
+    var inputLength = self.input().length,
+        inputLowerCase = self.input().toLowerCase().substring(0,inputLength);
 
     // first lowercase all letters in locationList array item and user input from
     // text box.  Then see if both match if so show those items.  Otherwise turn visability
-    // off for that item.
+    // off for that item.  And if input is empty retun all items back to list.
     for(var x = 0; x < locationLength; x++) {
       var nameLowerCase = self.locationList()[x].name(),
-          nameLowerCase = nameLowerCase.toLowerCase().substring(0,inputLength),
-          inputLowerCase = self.input().toLowerCase().substring(0,inputLength);
+          nameLowerCase = nameLowerCase.toLowerCase().substring(0,inputLength);
 
       if(inputLowerCase === nameLowerCase && inputLowerCase !== '') {
         self.locationList()[x].visibleBool(true);
