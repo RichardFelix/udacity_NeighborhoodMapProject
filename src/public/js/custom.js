@@ -38,6 +38,7 @@ var Place = function Place(data) {
   this.name = ko.observable(data.name);
   this.lat = ko.observable(data.lat);
   this.log = ko.observable(data.log);
+  this.visibleBool = ko.observable(true);
 };
 
 //////////////////////////////
@@ -65,30 +66,21 @@ var ViewModel = function ViewModel() {
       var nameLowerCase = self.locationList()[x].name(),
           nameLowerCase = nameLowerCase.toLowerCase().substring(0,inputLength),
           inputLowerCase = self.input().toLowerCase().substring(0,inputLength);
-console.log(inputLowerCase + " " + nameLowerCase);
+
       if(inputLowerCase === nameLowerCase && inputLowerCase !== '') {
-        console.log('greta');
+        self.locationList()[x].visibleBool(true);
+
+      }else if(inputLowerCase === '') {
+        self.locationList()[x].visibleBool(true);
+
+      }else{
+        self.locationList()[x].visibleBool(false);
       }
     }
   };
 
-  // text value
+  // text value start
   self.input = ko.observable('');
-
-  // self.name = ko.observable(self.locationList()[0].name());
-  // self.name1 = ko.observable(self.locationList()[1].name());
-  //
-  // self.filterList = ko.observable(true);
-  // self.input = ko.observable('');
-  // self.filter = function() {
-  //
-  //   var userText = self.input().toLowerCase(),
-  //       name = self.name().toLowerCase();
-  //
-  //   console.log(userText + " " + name);
-  //   if(userText == name)
-  //     self.filterList(false);
-  // };
 };
 
 ko.applyBindings(new ViewModel());

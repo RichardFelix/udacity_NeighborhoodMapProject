@@ -3,7 +3,6 @@ extends base
 block body
   input(type='text' data-bind='{event: {keyup: filter}, textInput: input}')
   ul(data-bind='foreach: locationList')
-    li(data-bind='text: name')
+    li(data-bind='text: name, visible: visibleBool')
   
   include ./scripts.jade
-  
