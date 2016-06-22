@@ -82,8 +82,8 @@ gulp.task('dev',
     'dev:sass',
     'dev:lint',
     'dev:jadeLint',
-    'dev:sassLint',
-    'dev:jsBabel'
+    'dev:sassLint'//,
+    // 'dev:jsBabel'
 ));
 
 gulp.task('dev:watch', gulp.series('dev', devWatch));
@@ -91,7 +91,7 @@ gulp.task('dev:watch', gulp.series('dev', devWatch));
 function devWatch(){
     gulp.watch(config.styles.srcDir, gulp.series('dev:sass'));
     gulp.watch(config.scripts.src, gulp.series('dev:lint'));
-    gulp.watch(config.scripts.src, gulp.series('dev:jsBabel'));
+    // gulp.watch(config.scripts.src, gulp.series('dev:jsBabel'));
     gulp.watch(config.jade.srcDir, gulp.series('dev:jadeLint'));
     gulp.watch(config.styles.srcDir, gulp.series('dev:sassLint'));
 }
