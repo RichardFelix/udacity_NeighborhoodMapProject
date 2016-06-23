@@ -14,55 +14,55 @@ var locations = [
       "name": "Statue of Liberty",
       "lat" : 40.6892534,
       "log" : -74.0466891,
-      "info": "The Empire State Building is a 102-storty skyscraper located in Midtown Manhattan, New York City, on Fifth Avenue between West 33rd and 34th Streets."
+      "info": "The Statue of Liberty is a colossal neoclassical sculpture on Liberty Island in New York Harbor in New York City, in the United States."
     },
     {
       "name": "Times Square",
       "lat" : 40.758899,
       "log" : -73.9873197,
-      "info": "The Empire State Building is a 102-storty skyscraper located in Midtown Manhattan, New York City, on Fifth Avenue between West 33rd and 34th Streets."
+      "info": "Times Square is a major commercial intersection and neighborhood in Midtown Manhattan, New York City, at the junction of Broadway and Seventh Avenue, and stretching from West 42nd to West 47th Streets."
     },
     {
       "name": "The Museum of Modern Art",
       "lat" : 40.7614367,
       "log" : -73.9798103,
-      "info": "The Empire State Building is a 102-storty skyscraper located in Midtown Manhattan, New York City, on Fifth Avenue between West 33rd and 34th Streets."
+      "info": "The Museum of Modern Art (MoMA) is an art museum located in Midtown Manhattan in New York City, on 53rd Street between Fifth and Sixth Avenues. It has been important in developing and collecting modernist art, and is often identified as the most influential museum of modern art in the world."
     },
     {
       "name": "Ellis Island Immigration Museum",
       "lat" : 40.6977041,
       "log" : 74.0391417,
-      "info": "The Empire State Building is a 102-storty skyscraper located in Midtown Manhattan, New York City, on Fifth Avenue between West 33rd and 34th Streets."
+      "info": "Ellis Island, in Upper New York Bay, was the gateway for over 12 million immigrants to the United States as the nation's busiest immigrant inspection station from 1892 until 1954."
     },
     {
       "name": "American Museum of Natural History",
       "lat" : 40.7813281,
       "log" : 73.9761769,
-      "info": "The Empire State Building is a 102-storty skyscraper located in Midtown Manhattan, New York City, on Fifth Avenue between West 33rd and 34th Streets."
+      "info": "The American Museum of Natural History, located on the Upper West Side of Manhattan, New York City, is one of the largest museums in the world. Located in park-like grounds across the street from Central Park, the museum complex comprises 27 interconnected buildings housing 45 permanent exhibition halls, in addition to a planetarium and a library. "
     },
     {
       "name": "Metropolitan Museum of Art",
       "lat" : 40.7794406,
       "log" : -73.9654327,
-      "info": "The Empire State Building is a 102-storty skyscraper located in Midtown Manhattan, New York City, on Fifth Avenue between West 33rd and 34th Streets."
+      "info": "The Metropolitan Museum of Art, colloquially, is located in New York City and is the largest art museum in the United States, and among the most visited art museums in the world."
     },
     {
       "name": "Grand Central Terminal",
       "lat" : 40.7527302,
       "log" : -73.9794181,
-      "info": "The Empire State Building is a 102-storty skyscraper located in Midtown Manhattan, New York City, on Fifth Avenue between West 33rd and 34th Streets."
+      "info": "Grand Central Terminal is a commuter, rapid transit railroad terminal at 42nd Street and Park Avenue in Midtown Manhattan in New York City, United States."
     },
     {
       "name": "Central Park",
       "lat" : 40.7828687,
       "log" : -73.9675438,
-      "info": "The Empire State Building is a 102-storty skyscraper located in Midtown Manhattan, New York City, on Fifth Avenue between West 33rd and 34th Streets."
+      "info": "Central Park is an urban park in middle-upper Manhattan, within New York City. Central Park is the most visited urban park in the United States, with 40 million visitors in 2013. It is also one of the most filmed locations in the world."
     },
     {
       "name": "Rockefeller Center",
       "lat" : 40.7587442,
       "log" : -73.9808623,
-      "info": "The Empire State Building is a 102-storty skyscraper located in Midtown Manhattan, New York City, on Fifth Avenue between West 33rd and 34th Streets."
+      "info": "Rockefeller Center is a complex of 19 commercial buildings covering 22 acres between 48th and 51st Streets in New York City."
     }
 ]
 
