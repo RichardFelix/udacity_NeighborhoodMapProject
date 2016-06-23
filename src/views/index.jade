@@ -1,8 +1,11 @@
 extends base
 
 block body
-  input(type='text' data-bind='{event: {keyup: filter}, textInput: input}')
-  ul(data-bind='foreach: locationList')
-    li(data-bind='text: name, visible: visibleBool')
+  div#map
+  div.list(style='background-color:red; width:300px')
+    input(type='text' data-bind='{event: {keyup: filter}, textInput: input}')
+    ul(data-bind='foreach: locationList')
+      li(data-bind='text: name, visible: visibleBool, click: $parent.showInfo.bind($data,name)')
+      p(data-bind='text: info, visible: visibleInfo')
   
   include ./scripts.jade
