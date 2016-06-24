@@ -126,6 +126,7 @@ var ViewModel = function ViewModel() {
 
       if(inputLowerCase !== nameLowerCase) {
         self.locationList()[x].visibleBool(false);
+        self.locationList()[x].visibleInfo(false);
       }else{
         self.locationList()[x].visibleBool(true);
       }
