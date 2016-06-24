@@ -112,7 +112,6 @@ var ViewModel = function ViewModel() {
     }
   };
 
-
   // filter visible list items
   self.filter = function() {
     var inputLength = self.input().length,
@@ -125,14 +124,10 @@ var ViewModel = function ViewModel() {
       var nameLowerCase = self.locationList()[x].name(),
           nameLowerCase = nameLowerCase.toLowerCase().substring(0,inputLength);
 
-      if(inputLowerCase === nameLowerCase && inputLowerCase !== '') {
-        self.locationList()[x].visibleBool(true);
-
-      }else if(inputLowerCase === '') {
-        self.locationList()[x].visibleBool(true);
-
-      }else{
+      if(inputLowerCase !== nameLowerCase) {
         self.locationList()[x].visibleBool(false);
+      }else{
+        self.locationList()[x].visibleBool(true);
       }
     }
   };
