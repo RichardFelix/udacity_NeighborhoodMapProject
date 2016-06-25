@@ -75,7 +75,6 @@ var Place = function Place(data) {
   this.log = ko.observable(data.log);
   this.info = ko.observable(data.info);
   this.visibleBool = ko.observable(true);
-  this.visibleInfo = ko.observable(false);
 };
 
 //////////////////////////////
@@ -91,15 +90,15 @@ var ViewModel = function ViewModel() {
     self.locationList.push( new Place(locations[x]) );
   }
 
-  // show infomation on Click of li also hide infomation if clicked li that
-  // is already shown.
+  // show infomation on Click of li also hide infomation if the li
+  // is hidden by filter
   self.showInfo = function(name) {
     var position = self.getLocationListObject(name());
 
-    if(self.locationList()[position].visibleInfo()){
-      self.locationList()[position].visibleInfo(false);
+    if(markerArr[position].getVisible() === true) {
+      showInfo(markerArr[position]);
     }else{
-      self.locationList()[position].visibleInfo(true);
+      closeInfo(markerArr[position]);
     }
   };
 
@@ -128,7 +127,7 @@ var ViewModel = function ViewModel() {
       if(inputLowerCase !== nameLowerCase) {
         markerArr[x].setVisible(false);
         self.locationList()[x].visibleBool(false);
-        self.locationList()[x].visibleInfo(false);
+        closeInfo(markerArr[x]);
       }else{
         markerArr[x].setVisible(true);
         self.locationList()[x].visibleBool(true);
@@ -170,14 +169,36 @@ function initMap() {
     });
 
     addListenerMarker(marker, map, infoWindow);
+    addListenerCloseMarker(marker, map, infoWindow);
 
     markerArr.push(marker);
   }
 }
 
 // closure function for adding infoWindow content to makers
+// Also adding a animation on click
 function addListenerMarker(marker, map, infoWindow) {
   marker.addListener('click', function() {
     infoWindow.open(map, marker);
+    marker.setAnimation(google.maps.Animation.BOUNCE);
   });
-};
+}
+
+// closure function for adding infoWindow.close() and
+// stop animation function to marker
+function addListenerCloseMarker(marker, map, infoWindow) {
+  marker.addListener('close', function() {
+    infoWindow.close();
+    marker.setAnimation(null);
+  });
+}
+
+// trigger infoWindow and animation to start
+function showInfo(marker) {
+  google.maps.event.trigger(marker, 'click');
+}
+
+// trigger close for infoWindow and animation
+function closeInfo(marker) {
+  google.maps.event.trigger(marker, 'close');
+}
