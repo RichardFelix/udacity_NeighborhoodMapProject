@@ -5,7 +5,7 @@ block body
   div.list
       br
       center
-        input(type='text' data-bind='{event: {keyup: filter}, textInput: input}')
+        input(type='text' data-bind='{event: {keyup: filter}, textInput: input}' placeholder='Filter')
       ul(data-bind='foreach: locationList')
         li(data-bind='text: name, visible: visibleBool, click: $parent.showInfo.bind($data,name)')
         p(data-bind='text: info, visible: visibleInfo')

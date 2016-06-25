@@ -6,8 +6,8 @@
 var locations = [
     {
       "name": "Empire State Building",
-      "lat" : 40.7194689,
-      "log" : -74.0316709,
+      "lat" : 40.7484444,
+      "log" : -73.9878441,
       "info": "The Empire State Building is a 102-storty skyscraper located in Midtown Manhattan, New York City, on Fifth Avenue between West 33rd and 34th Streets."
     },
     {
@@ -31,13 +31,13 @@ var locations = [
     {
       "name": "Ellis Island Immigration Museum",
       "lat" : 40.6977041,
-      "log" : 74.0391417,
+      "log" : -74.0391417,
       "info": "Ellis Island, in Upper New York Bay, was the gateway for over 12 million immigrants to the United States as the nation's busiest immigrant inspection station from 1892 until 1954."
     },
     {
       "name": "American Museum of Natural History",
       "lat" : 40.7813281,
-      "log" : 73.9761769,
+      "log" : -73.9761769,
       "info": "The American Museum of Natural History, located on the Upper West Side of Manhattan, New York City, is one of the largest museums in the world. Located in park-like grounds across the street from Central Park, the museum complex comprises 27 interconnected buildings housing 45 permanent exhibition halls, in addition to a planetarium and a library. "
     },
     {
@@ -120,14 +120,17 @@ var ViewModel = function ViewModel() {
     // first lowercase all letters in locationList array item and user input from
     // text box.  Then see if both match if so show those items.  Otherwise turn visability
     // off for that item.  And if input is empty retun all items back to list.
+    // Also hiding or showing mathing google maps makers
     for(var x = 0; x < locationLength; x++) {
       var nameLowerCase = self.locationList()[x].name(),
           nameLowerCase = nameLowerCase.toLowerCase().substring(0,inputLength);
 
       if(inputLowerCase !== nameLowerCase) {
+        markerArr[x].setVisible(false);
         self.locationList()[x].visibleBool(false);
         self.locationList()[x].visibleInfo(false);
       }else{
+        markerArr[x].setVisible(true);
         self.locationList()[x].visibleBool(true);
       }
     }
@@ -138,3 +141,43 @@ var ViewModel = function ViewModel() {
 };
 
 ko.applyBindings(new ViewModel());
+
+//////////////////////////////
+//         Map              //
+//////////////////////////////
+var map,
+    locationLength = locations.length,
+    markerArr = [];
+
+function initMap() {
+  map = new google.maps.Map(document.getElementById('map'), {
+    center: {lat: 40.7784051, lng: -73.9464522},
+    zoom: 12
+  });
+
+  for(var x = 0; x < locationLength; x++) {
+    var myLatLng = {lat: locations[x].lat, lng: locations[x].log},
+        infoWindow = new google.maps.InfoWindow({
+          content: locations[x].info,
+          maxWidth: 200
+        });
+
+    var marker = new google.maps.Marker({
+      position: myLatLng,
+      map: map,
+      title: 'Hello World!',
+      animation: google.maps.Animation.DROP
+    });
+
+    addListenerMarker(marker, map, infoWindow);
+
+    markerArr.push(marker);
+  }
+}
+
+// closure function for adding infoWindow content to makers
+function addListenerMarker(marker, map, infoWindow) {
+  marker.addListener('click', function() {
+    infoWindow.open(map, marker);
+  });
+};
