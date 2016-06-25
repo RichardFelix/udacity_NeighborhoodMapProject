@@ -75,6 +75,7 @@ var Place = function Place(data) {
   this.log = ko.observable(data.log);
   this.info = ko.observable(data.info);
   this.visibleBool = ko.observable(true);
+  this.infoVisible = ko.observable(false);
 };
 
 //////////////////////////////
@@ -95,10 +96,12 @@ var ViewModel = function ViewModel() {
   self.showInfo = function(name) {
     var position = self.getLocationListObject(name());
 
-    if(markerArr[position].getVisible() === true) {
+    if(self.locationList()[position].infoVisible() === false) {
       showInfo(markerArr[position]);
+      self.locationList()[position].infoVisible(true);
     }else{
       closeInfo(markerArr[position]);
+      self.locationList()[position].infoVisible(false);
     }
   };
 
@@ -222,6 +225,9 @@ closeList.addEventListener('click', function(){
   }
 });
 
+//////////////////////////////
+//     Flickr Api Calls     //
+//////////////////////////////
 // Flikr
 // key
 // f0b0865d687bdae8485ab41a107f73e4
