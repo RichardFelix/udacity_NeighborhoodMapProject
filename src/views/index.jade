@@ -2,7 +2,9 @@ extends base
 
 block body
   div#map
-  div.list
+  div#closeList
+    | X
+  div#list
       br
       center
         input(type='text' data-bind='{event: {keyup: filter}, textInput: input}' placeholder='Filter')

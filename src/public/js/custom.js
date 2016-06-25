@@ -202,3 +202,22 @@ function showInfo(marker) {
 function closeInfo(marker) {
   google.maps.event.trigger(marker, 'close');
 }
+
+//////////////////////////////
+//     Utility Functions    //
+//////////////////////////////
+var list = document.getElementById('list'),
+    closeList = document.getElementById('closeList');
+
+// adding click function to the closeList div and
+// moving the list and menu button off to the side of the screen
+// and back again if off the screen already
+closeList.addEventListener("click", function(){
+  if(list.style.transform === "translateX(100%)") {
+    list.style = 'transform:translateX(0%)';
+    closeList.style = 'transform:translateX(0%)';
+  }else{
+    list.style = 'transform:translateX(100%)';
+    closeList.style = 'transform:translateX(1415%)';
+  }
+});
