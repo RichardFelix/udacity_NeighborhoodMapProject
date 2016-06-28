@@ -1,7 +1,7 @@
 {
-  "name": "changeme",
+  "name": "mapudacity",
   "version": "1.0.0",
-  "description": "changeme",
+  "description": "neighborhood map project udacity",
   "main": "app.js",
   "dependencies": {
     "express": "^4.14.0",
