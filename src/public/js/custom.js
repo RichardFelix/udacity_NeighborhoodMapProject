@@ -23,10 +23,10 @@ var locations = [
       "info": "Times Square is a major commercial intersection and neighborhood in Midtown Manhattan, New York City, at the junction of Broadway and Seventh Avenue, and stretching from West 42nd to West 47th Streets."
     },
     {
-      "name": "The Museum of Modern Art",
-      "lat" : 40.7614367,
-      "log" : -73.9798103,
-      "info": "The Museum of Modern Art (MoMA) is an art museum located in Midtown Manhattan in New York City, on 53rd Street between Fifth and Sixth Avenues. It has been important in developing and collecting modernist art, and is often identified as the most influential museum of modern art in the world."
+      "name": "Botanical Gardens",
+      "lat" : 40.866559,
+      "log" : -73.8852977,
+      "info": "A botanical garden or botanic garden is a garden dedicated to the collection, cultivation and display of a wide range of plants labelled with their botanical names."
     },
     {
       "name": "Ellis Island Immigration Museum",
@@ -35,16 +35,16 @@ var locations = [
       "info": "Ellis Island, in Upper New York Bay, was the gateway for over 12 million immigrants to the United States as the nation's busiest immigrant inspection station from 1892 until 1954."
     },
     {
-      "name": "American Museum of Natural History",
-      "lat" : 40.7813281,
-      "log" : -73.9761769,
-      "info": "The American Museum of Natural History, located on the Upper West Side of Manhattan, New York City, is one of the largest museums in the world. Located in park-like grounds across the street from Central Park, the museum complex comprises 27 interconnected buildings housing 45 permanent exhibition halls, in addition to a planetarium and a library. "
+      "name": "Yankee Stadium",
+      "lat" : 40.8279884,
+      "log" : -73.9278355,
+      "info": "Yankee Stadium is a stadium located in the Bronx, a borough of New York City. It serves as the home ballpark for the New York Yankees of Major League Baseball (MLB), and the home stadium of New York City FC of Major League Soccer (MLS)."
     },
     {
-      "name": "Metropolitan Museum of Art",
-      "lat" : 40.7794406,
-      "log" : -73.9654327,
-      "info": "The Metropolitan Museum of Art, colloquially, is located in New York City and is the largest art museum in the United States, and among the most visited art museums in the world."
+      "name": "Bronx Zoo",
+      "lat" : 40.8505989,
+      "log" : -73.8791869,
+      "info": "The Bronx Zoo is a zoo located in the Bronx, a borough of New York City, within Bronx Park. It is the largest metropolitan zoo in the United States and among the largest in the world."
     },
     {
       "name": "Grand Central Terminal",
@@ -59,10 +59,10 @@ var locations = [
       "info": "Central Park is an urban park in middle-upper Manhattan, within New York City. Central Park is the most visited urban park in the United States, with 40 million visitors in 2013. It is also one of the most filmed locations in the world."
     },
     {
-      "name": "Rockefeller Center",
-      "lat" : 40.7587442,
-      "log" : -73.9808623,
-      "info": "Rockefeller Center is a complex of 19 commercial buildings covering 22 acres between 48th and 51st Streets in New York City."
+      "name": "Brooklyn Museum",
+      "lat" : 40.6712102,
+      "log" : -73.9658193,
+      "info": "The Brooklyn Museum is an art museum located in the New York City borough of Brooklyn. At 560,000 square feet (52,000 m2), the museum is New York City's third largest in physical size and holds an art collection with roughly 1.5 million works"
     }
 ]
 
@@ -154,11 +154,46 @@ var map,
     markerArr = [];
 
 function initMap() {
+  var customMapType = new google.maps.StyledMapType([
+      {
+        stylers: [
+          {hue: '#f0ece6'},
+          {visibility: 'simplified'},
+          {gamma: .8},
+          {weight: .5}
+        ]
+      },
+      {
+        elementType: 'labels',
+        stylers: [{
+          visibility: 'off'
+        }]
+      },
+      {
+        featureType: 'water',
+        stylers: [{
+          color: '#729af1'
+        }]
+      }
+    ], {
+      name: 'Custom Style'
+  }),
+  customMapTypeId = 'custom_style',
+  image = 'img/pin.png';
+
   map = new google.maps.Map(document.getElementById('map'), {
     center: {lat: 40.7784051, lng: -73.9464522},
     zoom: 12,
-    disableDefaultUI: true
+    disableDefaultUI: true,
+    mapTypeControlOptions: {
+      mapTypeIds: [google.maps.MapTypeId.ROADMAP, customMapTypeId]
+    }
   });
+
+  // adding styles to map
+  map.mapTypes.set(customMapTypeId, customMapType);
+  map.setMapTypeId(customMapTypeId);
+
 
   for(var x = 0; x < locationLength; x++) {
     var myLatLng = {lat: locations[x].lat, lng: locations[x].log},
@@ -172,7 +207,8 @@ function initMap() {
       position: myLatLng,
       map: map,
       title: locations[x].name,
-      animation: google.maps.Animation.DROP
+      animation: google.maps.Animation.DROP,
+      icon: image
     });
 
     addListenerMarker(marker, map, infoWindow, locations[x]);
@@ -275,13 +311,14 @@ function flickerLoad(item) {
                         "https://farm" + farmId +
                         ".staticflickr.com/" + serverId +
                         "/" + photoId + "_" +
-                        secret + "_m.jpg'>"
+                        secret + "_q.jpg' " +
+                        "alt='flikr image of location'>"
                     );
           $(items[x]).appendTo($infoPics);
           x++;
       });
     }).error(function() {
-      $infoPics.text('Pictures failed to load :-(');
+      $infoPics.text('Flickr pictures failed to load :-(');
   });
 }
 
@@ -291,7 +328,7 @@ function flickerLoad(item) {
 //
 // Secret:
 // 1ac413079d365ce4
-
+//
 // https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=f0b0865d687bdae8485ab41a107f73e4&lat=40.7484444&lon=-73.9878441&format=json&content_type=1&per_page=10&page=1&radius=1&radius_units=mi
 //
 // Example
