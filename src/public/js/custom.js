@@ -91,18 +91,20 @@ var ViewModel = function ViewModel() {
     self.locationList.push( new Place(locations[x]) );
   }
 
-  // show infoWindow on Click of li also hide infomation if the li
-  // click while the infoWindow is open
+  // show infoWindow on Click of li also hide infomation of all other li
   self.showInfo = function(name) {
-    var position = self.getLocationListObject(name());
+    var position = self.getLocationListObject(name()),
+        markerArrLength = markerArr.length;
 
-    if(self.locationList()[position].infoVisible() === false) {
-      showInfo(markerArr[position]);
-      self.locationList()[position].infoVisible(true);
-    }else{
-      closeInfo(markerArr[position]);
-      self.locationList()[position].infoVisible(false);
+    // make all markers and infoWindows close and stop all animations
+    for(var x = 0; x < markerArrLength; x++) {
+        stopAnimation(markerArr[x]);
+        closeInfo(markerArr[x]);
+        self.locationList()[x].infoVisible(false);
     }
+
+    showInfo(markerArr[position]);
+    self.locationList()[position].infoVisible(true);
   };
 
   // figure out locationList object
@@ -213,6 +215,7 @@ function initMap() {
 
     addListenerMarker(marker, map, infoWindow, locations[x]);
     addListenerCloseMarker(marker, map, infoWindow);
+    addListenerStopMarkerAnimation(marker);
 
     markerArr.push(marker);
   }
@@ -225,6 +228,9 @@ function addListenerMarker(marker, map, infoWindow, item) {
     flickerLoad(item);
     infoWindow.open(map, marker);
     marker.setAnimation(google.maps.Animation.BOUNCE);
+    setTimeout(function() {
+      marker.setAnimation(null);
+    }, 1500);
   });
 }
 
@@ -233,6 +239,13 @@ function addListenerMarker(marker, map, infoWindow, item) {
 function addListenerCloseMarker(marker, map, infoWindow) {
   marker.addListener('close', function() {
     infoWindow.close();
+    marker.setAnimation(null);
+  });
+}
+
+// closure function for add a stop animation function to marker
+function addListenerStopMarkerAnimation(marker) {
+  marker.addListener('stopAnimation', function() {
     marker.setAnimation(null);
   });
 }
@@ -246,6 +259,13 @@ function showInfo(marker) {
 function closeInfo(marker) {
   google.maps.event.trigger(marker, 'close');
 }
+
+// trigger stop animation
+function stopAnimation(marker) {
+  google.maps.event.trigger(marker, 'stopAnimation');
+}
+
+
 
 // set infoWindow Content substring
 function getInfoWindowContentString(x){
@@ -273,10 +293,12 @@ closeList.addEventListener('click', function() {
     list.style = 'transform:translateX(0%)';
     closeList.style = 'transform:translateX(0%)';
     flikrApiImage.style = 'transform:translateX(0%)';
+    $('#closeList').text('X');
   }else{
     list.style = 'transform:translateX(100%)';
     closeList.style = 'transform:translateX(1415%)';
     flikrApiImage.style = 'transform:translateX(450%)';
+    $('#closeList').text('<');
   }
 });
 
@@ -307,7 +329,7 @@ function flickerLoad(item) {
               serverId = data.photos.photo[x].server,
               photoId = data.photos.photo[x].id,
               secret = data.photos.photo[x].secret;
-          items.push("<img id='pic' src='" +
+          items.push("<img class='pic' src='" +
                         "https://farm" + farmId +
                         ".staticflickr.com/" + serverId +
                         "/" + photoId + "_" +
