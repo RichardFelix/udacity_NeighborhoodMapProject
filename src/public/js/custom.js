@@ -91,8 +91,8 @@ var ViewModel = function ViewModel() {
     self.locationList.push( new Place(locations[x]) );
   }
 
-  // show infomation on Click of li also hide infomation if the li
-  // is hidden by filter
+  // show infoWindow on Click of li also hide infomation if the li
+  // click while the infoWindow is open
   self.showInfo = function(name) {
     var position = self.getLocationListObject(name());
 
@@ -119,6 +119,8 @@ var ViewModel = function ViewModel() {
     var inputLength = self.input().length,
         inputLowerCase = self.input().toLowerCase().substring(0,inputLength);
 
+    // clear #images div
+    $($infoPics).empty();
     // first lowercase all letters in locationList array item and user input from
     // text box.  Then see if both match if so show those items.  Otherwise turn visability
     // off for that item.  And if input is empty retun all items back to list.
@@ -154,13 +156,15 @@ var map,
 function initMap() {
   map = new google.maps.Map(document.getElementById('map'), {
     center: {lat: 40.7784051, lng: -73.9464522},
-    zoom: 12
+    zoom: 12,
+    disableDefaultUI: true
   });
 
   for(var x = 0; x < locationLength; x++) {
     var myLatLng = {lat: locations[x].lat, lng: locations[x].log},
+        contentString = getInfoWindowContentString(x),
         infoWindow = new google.maps.InfoWindow({
-          content: locations[x].info,
+          content: contentString,
           maxWidth: 200
         });
 
@@ -171,7 +175,7 @@ function initMap() {
       animation: google.maps.Animation.DROP
     });
 
-    addListenerMarker(marker, map, infoWindow);
+    addListenerMarker(marker, map, infoWindow, locations[x]);
     addListenerCloseMarker(marker, map, infoWindow);
 
     markerArr.push(marker);
@@ -179,9 +183,10 @@ function initMap() {
 }
 
 // closure function for adding infoWindow content to makers
-// Also adding a animation on click
-function addListenerMarker(marker, map, infoWindow) {
+// Also adding a animation on click and loading pictures from flickr Api
+function addListenerMarker(marker, map, infoWindow, item) {
   marker.addListener('click', function() {
+    flickerLoad(item);
     infoWindow.open(map, marker);
     marker.setAnimation(google.maps.Animation.BOUNCE);
   });
@@ -206,28 +211,80 @@ function closeInfo(marker) {
   google.maps.event.trigger(marker, 'close');
 }
 
+// set infoWindow Content substring
+function getInfoWindowContentString(x){
+  var html = '<div id="contentString">' +
+                '</div>' +
+                '<p>' +
+                    locations[x].info +
+                '</p>' +
+              '</div>';
+  return html;
+}
+
 //////////////////////////////
 //     Utility Functions    //
 //////////////////////////////
 var list = document.getElementById('list'),
-    closeList = document.getElementById('closeList');
+    closeList = document.getElementById('closeList'),
+    flikrApiImage = document.getElementById('apis');
 
 // adding click function to the closeList div and
 // moving the list and menu button off to the side of the screen
 // and back again if off the screen already
-closeList.addEventListener('click', function(){
+closeList.addEventListener('click', function() {
   if(list.style.transform === 'translateX(100%)') {
     list.style = 'transform:translateX(0%)';
     closeList.style = 'transform:translateX(0%)';
+    flikrApiImage.style = 'transform:translateX(0%)';
   }else{
     list.style = 'transform:translateX(100%)';
     closeList.style = 'transform:translateX(1415%)';
+    flikrApiImage.style = 'transform:translateX(450%)';
   }
 });
 
 //////////////////////////////
 //     Flickr Api Calls     //
 //////////////////////////////
+var $infoPics = $('#images'),
+    key = 'f0b0865d687bdae8485ab41a107f73e4',
+    secret = '1ac413079d365ce4';
+
+// get items from flickr Api and append them to #images
+// Clearing #images div before adding new pictures to div
+function flickerLoad(item) {
+  var url = 'https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=' +
+            key +
+            '&lat=' + item.lat +
+            '&lon=' + item.log +
+            '&format=json&nojsoncallback=1&content_type=1&per_page=12&page=1&radius=1&radius_units=mi';
+
+  $.getJSON( url, function(data) {
+      var items = [],
+          x = 0;
+
+      $($infoPics).empty();
+
+      $.each( data.photos.photo, function() {
+          var farmId = data.photos.photo[x].farm,
+              serverId = data.photos.photo[x].server,
+              photoId = data.photos.photo[x].id,
+              secret = data.photos.photo[x].secret;
+          items.push("<img id='pic' src='" +
+                        "https://farm" + farmId +
+                        ".staticflickr.com/" + serverId +
+                        "/" + photoId + "_" +
+                        secret + "_m.jpg'>"
+                    );
+          $(items[x]).appendTo($infoPics);
+          x++;
+      });
+    }).error(function() {
+      $infoPics.text('Pictures failed to load :-(');
+  });
+}
+
 // Flikr
 // key
 // f0b0865d687bdae8485ab41a107f73e4
@@ -238,6 +295,11 @@ closeList.addEventListener('click', function(){
 // https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=f0b0865d687bdae8485ab41a107f73e4&lat=40.7484444&lon=-73.9878441&format=json&content_type=1&per_page=10&page=1&radius=1&radius_units=mi
 //
 // Example
+//------------------------
+// photos.photo[x].farm
+// photos.photo[x].server
+// photos.photo[x].id
+// photos.photo[x].secrect
 //
 // var farmId, serverId, photoId, secret;
 // "https://farm " + farmId + ".staticflickr.com/" + serverId + "/" + photoId + "_" + secret + "_m.jpg";
@@ -264,3 +326,7 @@ closeList.addEventListener('click', function(){
 // h	large 1600, 1600 on longest side†
 // k	large 2048, 2048 on longest side†
 // o	original image, either a jpg, gif or png, depending on source format
+
+
+//<img src='http://davidfeldmanshow.com/wp-content/uploads/2014/01/dogs-wallpaper.jpg'>
+// infowindow.setContent();

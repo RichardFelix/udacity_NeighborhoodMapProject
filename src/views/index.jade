@@ -10,5 +10,8 @@ block body
         input(type='text' data-bind='{event: {keyup: filter}, textInput: input}' placeholder='Filter')
       ul(data-bind='foreach: locationList')
         li(data-bind='text: name, visible: visibleBool, click: $parent.showInfo.bind($data,name)')
-    
+      div#images
+  div#apis
+    img(src='img/flikr.png') 
+  
   include ./scripts.jade
