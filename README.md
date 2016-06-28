@@ -22,10 +22,9 @@ Either use Staging Site Link or run on LocalHost instructions below
 ### Tools and Technology used
 
 * JavaScript
-* Bootstrap
 * Node.js
 * Express
-* Ejs
+* Jade
 * Sass
 * HTML
 * CSS
