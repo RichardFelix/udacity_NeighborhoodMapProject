@@ -259,13 +259,16 @@ var ViewModel = function ViewModel() {
     map.mapTypes.set(customMapTypeId, customMapType);
     map.setMapTypeId(customMapTypeId);
 
+    // standanrd infoWindow for all markers will be changed
+    // by addListenerMarker function
+    var infoWindow = new google.maps.InfoWindow({
+      content: '',
+      maxWidth: 200
+    });
+
     for(var x = 0; x < locationLength; x++) {
       var myLatLng = {lat: locations[x].lat, lng: locations[x].log},
-          contentString = getInfoWindowContentString(x),
-          infoWindow = new google.maps.InfoWindow({
-            content: contentString,
-            maxWidth: 200
-          });
+          contentString = getInfoWindowContentString(x);
 
       var marker = new google.maps.Marker({
           position: myLatLng,
@@ -275,7 +278,7 @@ var ViewModel = function ViewModel() {
           icon: image
       });
 
-      addListenerMarker(marker, map, infoWindow, locations[x]);
+      addListenerMarker(marker, map, infoWindow, locations[x], contentString);
       addListenerCloseMarker(marker, map, infoWindow);
       addListenerStopMarkerAnimation(marker);
 
@@ -291,10 +294,12 @@ var ViewModel = function ViewModel() {
 
   // closure function for adding infoWindow content to makers
   // Also adding a animation on click, closeList is triggered and loading pictures from flickr Api
-  function addListenerMarker(marker, map, infoWindow, item) {
+  // And set infoWindow for marker
+  function addListenerMarker(marker, map, infoWindow, item, contentString) {
     marker.addListener('click', function() {
       self.closeListEvent();
       clearAllMarkers();
+      infoWindow.setContent(contentString);
       flickerLoad(item);
       infoWindow.open(map, marker);
       marker.setAnimation(google.maps.Animation.BOUNCE);
@@ -384,7 +389,7 @@ var vm = new ViewModel();
 // callback function for google maps api
 function callMap(){
   vm.startMap();
-};
+}
 
 ko.applyBindings(vm);
 
