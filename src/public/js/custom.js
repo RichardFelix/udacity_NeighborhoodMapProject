@@ -91,17 +91,23 @@ var ViewModel = function ViewModel() {
     self.locationList.push( new Place(locations[x]) );
   }
 
-  // show infoWindow on Click of li also hide infomation of all other li
-  self.showInfo = function(name) {
-    var position = self.getLocationListObject(name()),
-        markerArrLength = markerArr.length;
+  // clear all markers infoWindows
+  function clearAllMarkers(){
+    var markerArrLength = markerArr.length;
 
     // make all markers and infoWindows close and stop all animations
     for(var x = 0; x < markerArrLength; x++) {
-        stopAnimation(markerArr[x]);
-        closeInfo(markerArr[x]);
-        self.locationList()[x].infoVisible(false);
+      stopAnimation(markerArr[x]);
+      closeInfo(markerArr[x]);
+      self.locationList()[x].infoVisible(false);
     }
+  }
+
+  // show infoWindow on Click of li also hide infomation of all other li
+  self.showInfo = function(name) {
+    var position = self.getLocationListObject(name());
+
+    clearAllMarkers();
 
     showInfo(markerArr[position]);
     self.locationList()[position].infoVisible(true);
@@ -168,18 +174,16 @@ var ViewModel = function ViewModel() {
 
     $.getJSON( url, function(data) {
 
-        var count = 0;
         self.images.removeAll();
 
-        $.each( data.photos.photo, function() {
-            var farmId = data.photos.photo[count].farm,
-                serverId = data.photos.photo[count].server,
-                photoId = data.photos.photo[count].id,
-                secret = data.photos.photo[count].secret,
+        $.each( data.photos.photo, function(index, photo) {
+            var farmId = photo.farm,
+                serverId = photo.server,
+                photoId = photo.id,
+                secret = photo.secret,
                 url = addImagestoUrl(farmId, serverId, photoId, secret);
 
             self.images.push( {url: url} );
-            count++;
         });
 
       }).error(function() {
@@ -272,9 +276,11 @@ var ViewModel = function ViewModel() {
   initMap();
 
   // closure function for adding infoWindow content to makers
-  // Also adding a animation on click and loading pictures from flickr Api
+  // Also adding a animation on click, closeList is triggered and loading pictures from flickr Api
   function addListenerMarker(marker, map, infoWindow, item) {
     marker.addListener('click', function() {
+      self.closeListEvent();
+      clearAllMarkers();
       flickerLoad(item);
       infoWindow.open(map, marker);
       marker.setAnimation(google.maps.Animation.BOUNCE);
@@ -350,6 +356,60 @@ var ViewModel = function ViewModel() {
     }
   });
 
+  // trigger list event only if it is not already off to the side
+  self.closeListEvent = function() {
+    if(!(list.style.transform === 'translateX(100%)')) {
+        $('#closeList').trigger('click');
+    }
+  }
+
 };
 
 ko.applyBindings(new ViewModel());
+
+// flickr
+// ----------
+// key
+// f0b0865d687bdae8485ab41a107f73e4
+//
+// Secret:
+// 1ac413079d365ce4
+//
+// https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=f0b0865d687bdae8485ab41a107f73e4&lat=40.7484444&lon=-73.9878441&format=json&content_type=1&per_page=10&page=1&radius=1&radius_units=mi
+//
+// Example
+//------------------------
+// photos.photo[x].farm
+// photos.photo[x].server
+// photos.photo[x].id
+// photos.photo[x].secrect
+//
+// var farmId, serverId, photoId, secret;
+// "https://farm " + farmId + ".staticflickr.com/" + serverId + "/" + photoId + "_" + secret + "_m.jpg";
+// https://farm1.staticflickr.com/2/1418878_1e92283336_m.jpg
+//
+// farm-id: 1
+// server-id: 2
+// photo-id: 1418878
+// secret: 1e92283336
+// size: m
+//
+// Size Suffixes
+//
+// The letter suffixes are as follows:
+// s	small square 75x75
+// q	large square 150x150
+// t	thumbnail, 100 on longest side
+// m	small, 240 on longest side
+// n	small, 320 on longest side
+// -	medium, 500 on longest side
+// z	medium 640, 640 on longest side
+// c	medium 800, 800 on longest sideâ
+// b	large, 1024 on longest side*
+// h	large 1600, 1600 on longest sideâ
+// k	large 2048, 2048 on longest sideâ
+// o	original image, either a jpg, gif or png, depending on source format
+
+
+//<img src='http://davidfeldmanshow.com/wp-content/uploads/2014/01/dogs-wallpaper.jpg'>
+// infowindow.setContent();
