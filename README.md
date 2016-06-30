@@ -30,6 +30,7 @@ I am using Gulp 4.0 alpha version here are instructions on installing it
 * JavaScript
 * Node.js
 * Express
+* KnockoutJS
 * Jade
 * Sass
 * HTML
