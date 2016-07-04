@@ -1,4 +1,4 @@
-# Map Neighborhood
+# Neighborhood Map
 
 ## Summary
 
@@ -23,13 +23,14 @@ Either use Staging Site Link or run on LocalHost instructions below
 I am using Gulp 4.0 alpha version here are instructions on installing it  
 
 1. npm install  --save-dev gulpjs/gulp#4.0  ( get the non released version of gulp that is backwards compatible with cli 3.X )
-2.npm install -g gulpjs/gulp-cli#4.0
+2.npm install -g gulp-cli
 
 ### Tools and Technology used
 
 * JavaScript
 * Node.js
 * Express
+* KnockoutJS
 * Jade
 * Sass
 * HTML
