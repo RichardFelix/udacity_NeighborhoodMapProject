@@ -354,23 +354,40 @@ var ViewModel = function ViewModel() {
   //////////////////////////////
   //     Utility Functions    //
   //////////////////////////////
-  var list = document.getElementById('list'),
-      closeList = document.getElementById('closeList'),
-      flikrApiImage = document.getElementById('apis');
+  var $list = $('#list'),
+      $closeList = $('#closeList'),
+      $flikrApiImage = $('#apis'),
+      openCss = {
+        'transform':'translateX(0%)',
+        '-webkit-transform':'translateX(0%)',
+        '-moz-transform':'translateX(0%)'
+      };
 
   // adding click function to the closeList div and
   // moving the list and menu button off to the side of the screen
   // and back again if off the screen already
   closeList.addEventListener('click', function() {
     if(list.style.transform === 'translateX(100%)') {
-      list.style = 'transform:translateX(0%)';
-      closeList.style = 'transform:translateX(0%)';
-      flikrApiImage.style = 'transform:translateX(0%)';
+      $list.css(openCss);
+      $closeList.css(openCss);
+      $flikrApiImage.css(openCss);
       $('#closeList').text('X');
     }else{
-      list.style = 'transform:translateX(100%)';
-      closeList.style = 'transform:translateX(1415%)';
-      flikrApiImage.style = 'transform:translateX(450%)';
+      $list.css({
+        'transform':'translateX(100%)',
+        '-webkit-transform':'translateX(100%)',
+        '-moz-transform':'translateX(100%)'
+      });
+      $closeList.css({
+        'transform':'translateX(1415%)',
+        '-webkit-transform':'translateX(1415%)',
+        '-moz-transform':'translateX(1415%)'
+      });
+      $flikrApiImage.css({
+        'transform':'translateX(450%)',
+        '-webkit-transform':'translateX(450%)',
+        '-moz-transform':'translateX(450%)'
+      });
       $('#closeList').text('<');
     }
   });
